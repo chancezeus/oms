@@ -125,23 +125,23 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
             return;
         }
 
-        if (this.formatTimeoutId != null) {
+        if (this.formatTimeoutId) {
             return;
         } // only format markers once per run loop (in case e.g. being called repeatedly from addMarker)
 
         return this.formatTimeoutId = window.setTimeout(() => {
             this.formatTimeoutId = null;
 
-            if (this.projectionHelper.getProjection() != null) {
+            if (this.projectionHelper.getProjection()) {
                 return this.doFormatMarkers();
             }
 
-            if (this.formatIdleListener != null) {
+            if (this.formatIdleListener) {
                 return;
             } // if the map is not yet ready, and we're not already waiting, wait until it is ready
 
             return this.formatIdleListener = google.maps.event.addListenerOnce(this.map, 'idle', () => this.doFormatMarkers());
-        }, 0);
+        }, 50);
     }
 
     private generatePtsCircle(count: number, centerPt: { x: number, y: number }) {
@@ -205,7 +205,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
             return;
         }
 
-        if (marker['_omsData'] != null && (positionChanged || !marker.getVisible())) {
+        if (marker['_omsData'] && (positionChanged || !marker.getVisible())) {
             this.unspiderfy(positionChanged ? marker : null);
         }
 
@@ -221,7 +221,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
         let pxSq = nDist * nDist;
 
         let mData = this.markers.map((marker: any) => ({
-            pt: this.llToPt((marker['_omsData'] != null ? marker['_omsData'].usualPosition : undefined) != null ? marker['_omsData'] != null ? marker['_omsData'].usualPosition : undefined : marker.position),
+            pt: this.llToPt(marker['_omsData'] && marker['_omsData'].usualPosition || marker.position),
             willSpiderfy: false
         }));
 
@@ -357,7 +357,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
     }
 
     private spiderListener(marker: any, event: any) {
-        let markerSpiderfied = marker['_omsData'] != null;
+        let markerSpiderfied = !!marker['_omsData'];
 
         if (!markerSpiderfied || !this.keepSpiderfied) {
             this.unspiderfy();
@@ -410,7 +410,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
     }
 
     trackMarker(marker: any, spiderClickHandler: Function): OverlappingMarkerSpiderfier {
-        if (marker['_oms'] != null) {
+        if (marker['_oms']) {
             return this;
         }
 
@@ -433,7 +433,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
             );
         }
 
-        if (spiderClickHandler != null) {
+        if (spiderClickHandler) {
             listenerRefs.push(
                 google.maps.event.addListener(marker, 'spider_click', spiderClickHandler)
             );
@@ -462,7 +462,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
     }
 
     forgetMarker(marker: any) {
-        if (marker['_omsData'] != null) {
+        if (marker['_omsData']) {
             this.unspiderfy();
         }
 
@@ -553,7 +553,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
                 continue;
             }
 
-            let mPt = this.llToPt((current['_omsData'] != null ? current['_omsData'].usualPosition : undefined) != null ? current['_omsData'] != null ? current['_omsData'].usualPosition : undefined : current.position);
+            let mPt = this.llToPt(current['_omsData'] && current['_omsData'].usualPosition || current.position);
 
             if (OverlappingMarkerSpiderfier.ptDistanceSq(mPt, markerPt) < pxSq) {
                 markers.push(current);
@@ -595,7 +595,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
         for (let i = 0; i < this.markers.length; i++) {
             const marker = this.markers[i] as any;
 
-            if (marker['_omsData'] != null) {
+            if (marker['_omsData']) {
                 marker['_omsData'].leg.setMap(null);
 
                 if (marker !== markerNotToMove) {
@@ -604,7 +604,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
                 marker.setZIndex(marker['_omsData'].usualZIndex);
 
                 let listeners = marker['_omsData'].hightlightListeners;
-                if (listeners != null) {
+                if (listeners) {
                     google.maps.event.removeListener(listeners.highlight);
                     google.maps.event.removeListener(listeners.unhighlight);
                 }
