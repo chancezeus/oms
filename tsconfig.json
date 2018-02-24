@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es5",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "removeComments": false,
+    "moduleResolution": "node",
+    "declaration": true,
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "types": [
+      "googlemaps"
+    ]
+  },
+  "exclude": [
+    ".tmp"
+  ],
+  "include": [
+    "lib/**/*"
+  ]
+}
