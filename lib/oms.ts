@@ -132,16 +132,15 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
         return this.formatTimeoutId = window.setTimeout(() => {
             this.formatTimeoutId = null;
 
-            if (this.projectionHelper.getProjection()) {
-                return this.doFormatMarkers();
-            }
-
             if (this.formatIdleListener) {
                 return;
-            } // if the map is not yet ready, and we're not already waiting, wait until it is ready
+            }
 
-            return this.formatIdleListener = google.maps.event.addListenerOnce(this.map, 'idle', () => this.doFormatMarkers());
-        }, 50);
+            this.formatIdleListener = google.maps.event.addListenerOnce(this.map, 'idle', () => {
+                this.formatIdleListener = null;
+                this.doFormatMarkers();
+            });
+        });
     }
 
     private generatePtsCircle(count: number, centerPt: { x: number, y: number }) {
