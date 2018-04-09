@@ -633,7 +633,7 @@ export class OverlappingMarkerSpiderfier implements SpiderOptions {
     }
 
     constructor(private map: google.maps.Map, options: SpiderOptions = {}) {
-        const keys = Object.keys(OverlappingMarkerSpiderfier.optionAttributes)
+        const keys = OverlappingMarkerSpiderfier.optionAttributes
             .filter(key => typeof (<any>options)[key] !== 'undefined');
 
         keys.forEach(key => {
