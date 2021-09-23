@@ -1,6 +1,6 @@
 {
   "name": "ts-overlapping-marker-spiderfier",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Overlapping Marker Spiderfier",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.js",
@@ -27,7 +27,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@types/googlemaps": "^3.30.7"
+    "@types/google.maps": "^3.45.6"
   },
   "devDependencies": {
     "rimraf": "^2.6.2",
